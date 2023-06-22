@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "promotion": "Curs JS",
+    "members": "Crevian Vlad",
+    "name": "Teams Networking",
+    "url": "https://github.com/crevian/teams-networking"
+  },
+  {
+    "id": 2,
+    "promotion": "Curs JS 2023",
+    "members": "A lot of members",
+    "name": "Teams 2023",
+    "url": "https://github.com/crevian/teams-networking"
+  }
+]
