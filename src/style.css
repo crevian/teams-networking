@@ -3,9 +3,9 @@ html {
 }
 
 header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  /* display: flex;
+  flex-direction: row; */
+  /* align-items: center; */
   background-image: url("images/th.png");
 }
 
@@ -13,7 +13,7 @@ header {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: linear-gradient(45, #0798abfa, transparent);
+  background: linear-gradient(45deg, #0798abfa, transparent);
 }
 
 #header-info {
