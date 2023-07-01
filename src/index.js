@@ -11,8 +11,11 @@ function getTeamAsHTML(team) {
     <td>${team.members}</td>
     <td>${team.name}</td>
     <td>${team.url}</td>
-    <td>✂ &#9998;</td>
-    </tr>`;
+    <td>
+      <a class="remove-btn">✂</a>
+      <a class="edit-btn">&#9998;</a>
+    </td>
+  </tr>`;
 }
 
 function displayTeams(teams) {
@@ -26,13 +29,21 @@ function loadTeams() {
   fetch("http://localhost:3000/teams-json", {
     method: "GET",
     headers: {
-      "Content-Type": "application/json",
-    },
+      "Content-Type": "application/json"
+    }
   })
-    .then((r) => r.json())
-    .then((teams) => {
+    .then(r => r.json())
+    .then(teams => {
       displayTeams(teams);
     });
 }
 
+function initEvents() {
+  $("#teamsTable tbody").addEventListener("click", e => {
+    console.warn("click", e);
+  });
+  console.info("events");
+}
+
 loadTeams();
+initEvents();
