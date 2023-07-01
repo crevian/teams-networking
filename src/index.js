@@ -1,6 +1,8 @@
 import "./style.css";
 //starting the app
 
+let allTeams = [];
+
 function $(selector) {
   return document.querySelector(selector);
 }
@@ -13,6 +15,22 @@ function deleteTeamRequest(id) {
     },
     body: JSON.stringify({ id: id })
   }).then(r => r.json());
+}
+
+function updateTeamRequest() {
+  fetch("http://localhost:3000/teams-json/update", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      id: "fedcba1610310163146",
+      promotion: "WON3",
+      members: "UpdatedName",
+      name: "Name",
+      url: "https://github.com/nmatei/teams-networking"
+    })
+  });
 }
 
 function getTeamAsHTML(team) {
@@ -44,8 +62,19 @@ function loadTeams() {
   })
     .then(r => r.json())
     .then(teams => {
+      allTeams = teams;
       displayTeams(teams);
     });
+}
+
+function startEdit(id) {
+  const team = allTeams.find(team => team.id == id); //Todo
+  // console.info(team);
+
+  $("#promotion").value = team.promotion;
+  $("#members").value = team.members;
+  $("input[name=name]").value = team.name;
+  $("input[name=url]").value = team.url;
 }
 
 function initEvents() {
@@ -59,6 +88,9 @@ function initEvents() {
           loadTeams();
         }
       });
+    } else if (e.target.matches("a.edit-btn")) {
+      const id = e.target.dataset.id;
+      startEdit(id);
     }
   });
 }
