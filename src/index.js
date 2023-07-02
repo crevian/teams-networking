@@ -1,6 +1,7 @@
 import "./style.css";
 //starting the app
 
+let editId;
 let allTeams = [];
 
 function $(selector) {
@@ -62,6 +63,7 @@ function loadTeams() {
 }
 
 function startEdit(id) {
+  editId = id;
   const team = allTeams.find(team => team.id == id); //Todo
   // console.info(team);
 
@@ -78,13 +80,19 @@ function onSubmit(e) {
   const name = $("input[name=name]").value;
   const url = $("input[name=url]").value;
   const team = {
+    id: editId,
     promotion,
     members,
     name: name,
     url: url
   };
   console.warn("submit", team);
-  // updateTeamRequest(team);
+  updateTeamRequest(team).then(status => {
+    if (status.success) {
+      // version 1;
+      window.location.reload();
+    }
+  });
 }
 
 function initEvents() {
