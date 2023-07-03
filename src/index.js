@@ -132,11 +132,10 @@ function onSubmit(e) {
   } else {
     createTeamRequest(team).then(status => {
       if (status.success) {
-        // version 1
-        // window.location.reload();
-
-        // version 2
-        loadTeams();
+        //console.info("saved", team);
+        team.id = status.id;
+        allTeams.push(team);
+        displayTeams(allTeams);
         $("#teamsForm").reset();
       }
     });
