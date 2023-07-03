@@ -125,14 +125,11 @@ function filterElements(elements, search) {
   });
 }
 
-function searchTeams(e) {
-  const searchText = e.target.value;
-  const filteredTeams = filterElements(allTeams, searchText);
-  displayTeams(filteredTeams);
-}
-
 function initEvents() {
-  $("#searchTeams").addEventListener("input", searchTeams);
+  $("#searchTeams").addEventListener("input", e => {
+    const filteredTeams = filterElements(allTeams, e.target.value);
+    displayTeams(filteredTeams);
+  });
 
   $("#teamsTable tbody").addEventListener("click", e => {
     if (e.target.matches("a.remove-btn")) {
