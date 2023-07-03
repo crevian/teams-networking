@@ -119,8 +119,12 @@ function onSubmit(e) {
         // version 2;
         // loadTeams();
 
-        const i = allTeams.findIndex(t => t.id === editId);
-        allTeams[i] = team;
+        // const i = allTeams.findIndex(t => t.id === editId);
+        // allTeams[i] = team;
+
+        const edited = allTeams.find(t => t.id === editId);
+        Object.assign(edited, team);
+
         displayTeams(allTeams);
         $("#teamsForm").reset();
       }
