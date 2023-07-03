@@ -111,18 +111,25 @@ function onSubmit(e) {
 
   if (editId) {
     team.id = editId;
-    console.warn("submit", team);
     updateTeamRequest(team).then(status => {
       if (status.success) {
         // version 1;
-        window.location.reload();
+        // window.location.reload();
+
+        // version 2;
+        loadTeams();
+        $("#teamsForm").reset();
       }
     });
   } else {
     createTeamRequest(team).then(status => {
       if (status.success) {
         // version 1
-        window.location.reload();
+        // window.location.reload();
+
+        // version 2
+        loadTeams();
+        $("#teamsForm").reset();
       }
     });
   }
