@@ -116,9 +116,19 @@ function onSubmit(e) {
 }
 
 function searchTeams(e) {
-  let searchText = e.target.value;
+  let searchText = e.target.value.toLowerCase();
   console.warn(searchText);
   console.warn(allTeams);
+  var filteredTeams = allTeams.filter(team => {
+    return (
+      team.promotion.toLowerCase().includes(searchText) ||
+      team.members.toLowerCase().includes(searchText) ||
+      team.name.toLowerCase().includes(searchText) ||
+      team.url.toLowerCase().includes(searchText)
+    );
+  });
+  console.warn("filtered teams", filteredTeams);
+  displayTeams(filteredTeams);
 }
 
 function initEvents() {
