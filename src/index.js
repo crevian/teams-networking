@@ -116,9 +116,7 @@ function onSubmit(e) {
 }
 
 function searchTeams(e) {
-  let searchText = e.target.value.toLowerCase();
-  console.warn(searchText);
-  console.warn(allTeams);
+  const searchText = e.target.value.toLowerCase();
   var filteredTeams = allTeams.filter(team => {
     return (
       team.promotion.toLowerCase().includes(searchText) ||
@@ -127,7 +125,7 @@ function searchTeams(e) {
       team.url.toLowerCase().includes(searchText)
     );
   });
-  console.warn("filtered teams", filteredTeams);
+
   displayTeams(filteredTeams);
 }
 
