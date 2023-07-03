@@ -45,15 +45,16 @@ function createTeamRequest(team) {
   }).then(r => r.json());
 }
 
-function getTeamAsHTML(team) {
+function getTeamAsHTML({ id, promotion, members, name, url }) {
+  const displayUrl = url.startsWith("https://gihub.com") ? url.substring(19) : url;
   return `<tr>
-    <td>${team.promotion}</td>
-    <td>${team.members}</td>
-    <td>${team.name}</td>
-    <td>${team.url}</td>
+    <td>${promotion}</td>
+    <td>${members}</td>
+    <td>${name}</td>
+    <td><a href="${url}" target="_blank">${displayUrl}</a></td>
     <td>
-      <a data-id="${team.id}" class="remove-btn">✂</a>
-      <a data-id="${team.id}" class="edit-btn">&#9998;</a>
+      <a data-id="${id}" class="remove-btn">✂</a>
+      <a data-id="${id}" class="edit-btn">&#9998;</a>
     </td>
   </tr>`;
 }
