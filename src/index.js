@@ -60,15 +60,26 @@ function getTeamAsHTML(team) {
 
 let previewDisplayTeams = [];
 function displayTeams(teams) {
-  if (previewDisplayTeams === teams) {
+  if ((teams === previewDisplayTeams) === teams) {
     console.warn("same teams already displayed");
     return;
-  } else {
-    previewDisplayTeams = teams;
-    console.warn("displayTeams", teams);
-    const teamsHTML = teams.map(getTeamAsHTML);
-    $("#teamsTable tbody").innerHTML = teamsHTML.join("");
   }
+
+  if (previewDisplayTeams.length === teams.length) {
+    let sameContent = previewDisplayTeams.every((team, i) => {
+      console.warn("element :", team, i);
+      return team === teams[i];
+    });
+    if (sameContent) {
+      console.warn("sameContent");
+      return;
+    }
+  }
+
+  previewDisplayTeams = teams;
+  console.warn("displayTeams: ", teams);
+  const teamsHTML = teams.map(getTeamAsHTML);
+  $("#teamsTable tbody").innerHTML = teamsHTML.join("");
 }
 
 function loadTeams() {
@@ -120,17 +131,15 @@ function onSubmit(e) {
     team.id = editId;
     updateTeamRequest(team).then(status => {
       if (status.success) {
-        // version 1;
-        // window.location.reload();
-
-        // version 2;
-        // loadTeams();
-
-        // const i = allTeams.findIndex(t => t.id === editId);
-        // allTeams[i] = team;
-
-        const edited = allTeams.find(t => t.id === editId);
-        Object.assign(edited, team);
+        allTeams = allTeams.map(t => {
+          if (t.id === editId) {
+            return {
+              ...t,
+              ...team
+            };
+          }
+          return t;
+        });
 
         displayTeams(allTeams);
         $("#teamsForm").reset();
