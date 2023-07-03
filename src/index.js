@@ -117,7 +117,11 @@ function onSubmit(e) {
         // window.location.reload();
 
         // version 2;
-        loadTeams();
+        // loadTeams();
+
+        const i = allTeams.findIndex(t => t.id === editId);
+        allTeams[i] = team;
+        displayTeams(allTeams);
         $("#teamsForm").reset();
       }
     });
