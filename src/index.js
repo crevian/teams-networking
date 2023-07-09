@@ -14,11 +14,11 @@ function deleteTeamRequest(id, callback) {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ id: id })
+    body: JSON.stringify({ id })
   })
     .then(r => r.json())
     .then(status => {
-      if (callback && typeof callback === "function") {
+      if (typeof callback === "function") {
         callback(status);
       }
       return status;
@@ -46,7 +46,7 @@ function createTeamRequest(team) {
 }
 
 function getTeamAsHTML({ id, promotion, members, name, url }) {
-  const displayUrl = url.startsWith("https://gihub.com") ? url.substring(19) : url;
+  const displayUrl = url.startsWith("https://github.com/") ? url.substring(19) : url;
   return `<tr>
     <td>${promotion}</td>
     <td>${members}</td>
@@ -61,24 +61,20 @@ function getTeamAsHTML({ id, promotion, members, name, url }) {
 
 let previewDisplayTeams = [];
 function displayTeams(teams) {
-  if ((teams === previewDisplayTeams) === teams) {
+  if (teams === previewDisplayTeams) {
     console.warn("same teams already displayed");
     return;
   }
 
-  if (previewDisplayTeams.length === teams.length) {
-    let sameContent = previewDisplayTeams.every((team, i) => {
-      console.warn("element :", team, i);
-      return team === teams[i];
-    });
-    if (sameContent) {
-      console.warn("sameContent");
+  if (teams.length === previewDisplayTeams.length) {
+    if (teams.every((team, i) => team === previewDisplayTeams[i])) {
+      console.warn("same content");
       return;
     }
   }
 
   previewDisplayTeams = teams;
-  console.warn("displayTeams: ", teams);
+  console.warn("displayTeams", teams);
   const teamsHTML = teams.map(getTeamAsHTML);
   $("#teamsTable tbody").innerHTML = teamsHTML.join("");
 }
@@ -103,11 +99,11 @@ function startEdit(id) {
   setTeamValues(team);
 }
 
-function setTeamValues(team) {
-  $("#promotion").value = team.promotion;
-  $("#members").value = team.members;
-  $("input[name=name]").value = team.name;
-  $("input[name=url]").value = team.url;
+function setTeamValues({ promotion, members, name, url }) {
+  $("#promotion").value = promotion;
+  $("#members").value = members;
+  $("input[name=name]").value = name;
+  $("input[name=url]").value = url;
 }
 
 function getTeamValues() {
@@ -130,10 +126,13 @@ function onSubmit(e) {
 
   if (editId) {
     team.id = editId;
-    updateTeamRequest(team).then(status => {
-      if (status.success) {
+    updateTeamRequest(team).then(({ success }) => {
+      if (success) {
         allTeams = allTeams.map(t => {
           if (t.id === editId) {
+            console.warn("team", team);
+            // return team;
+            // return { ...team };
             return {
               ...t,
               ...team
@@ -163,9 +162,7 @@ function onSubmit(e) {
 function filterElements(elements, search) {
   search = search.toLowerCase();
   return elements.filter(element => {
-    return Object.entries(element).some(entry => {
-      const key = entry[0];
-      const value = entry[1];
+    return Object.entries(element).some(([key, value]) => {
       if (key !== "id") {
         return value.toLowerCase().includes(search);
       }
@@ -175,17 +172,16 @@ function filterElements(elements, search) {
 
 function initEvents() {
   $("#searchTeams").addEventListener("input", e => {
-    const filteredTeams = filterElements(allTeams, e.target.value);
-    displayTeams(filteredTeams);
+    const teams = filterElements(allTeams, e.target.value);
+    displayTeams(teams);
   });
 
   $("#teamsTable tbody").addEventListener("click", e => {
     if (e.target.matches("a.remove-btn")) {
       const id = e.target.dataset.id;
-      // console.warn("remove %o", id);
-      deleteTeamRequest(id, status => {
-        if (status.success) {
-          // console.warn("delete done", status);
+      //console.warn("remove %o", id);
+      deleteTeamRequest(id, ({ success }) => {
+        if (success) {
           loadTeams();
         }
       });
