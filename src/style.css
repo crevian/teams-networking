@@ -64,13 +64,17 @@ h1 {
 
 .tbar {
   display: flex;
-  padding: 10px 0;
+  gap: 5px;
   flex-direction: row;
-  justify-content: space-between;
+  padding: 10px 0;
+  /* justify-content: space-between; */
+}
+
+.tfill {
+  flex: 1;
 }
 
 .tbar label {
-  padding: 0 5px;
   cursor: pointer;
 }
 
