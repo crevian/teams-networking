@@ -165,17 +165,16 @@ async function onSubmit(e) {
       hideLoadingMask();
     }
   } else {
-    createTeamRequest(team).then(status => {
-      if (status.success) {
-        //console.info("saved", team);
-        team.id = status.id;
-        // allTeams.push(team);
-        allTeams = [...allTeams, team];
-        displayTeams(allTeams);
-        $("#teamsForm").reset();
-        hideLoadingMask();
-      }
-    });
+    const status = await createTeamRequest(team);
+    if (status.success) {
+      //console.info("saved", team);
+      team.id = status.id;
+      // allTeams.push(team);
+      allTeams = [...allTeams, team];
+      displayTeams(allTeams);
+      $("#teamsForm").reset();
+      hideLoadingMask();
+    }
   }
 }
 
