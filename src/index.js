@@ -206,13 +206,19 @@ function sleep(ms) {
   });
 }
 
-(() => {
+(async () => {
   console.info("start sleeping ...");
-  sleep(1000).then(() => {
-    console.warn("ready to do %o", "next job");
-  });
+  // sleep(1000).then(() => {
+  //   console.warn("ready to do %o", "next job");
+  // });
+
+  await sleep(1000);
+  console.warn("ready to do %o", "next job");
   console.warn("executed before sleep.then");
 })();
 
 loadTeams();
 initEvents();
+
+$("#teamsForm").classList.add("loading-mask");
+$("#teamsForm").classList.remove("loading-mask");
