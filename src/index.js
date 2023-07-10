@@ -134,7 +134,7 @@ function getTeamValues() {
   };
 }
 
-function onSubmit(e) {
+async function onSubmit(e) {
   e.preventDefault();
 
   const team = getTeamValues();
@@ -143,27 +143,27 @@ function onSubmit(e) {
 
   if (editId) {
     team.id = editId;
-    updateTeamRequest(team).then(({ success }) => {
-      if (success) {
-        allTeams = allTeams.map(t => {
-          if (t.id === editId) {
-            console.warn("team", team);
-            // return team;
-            // return { ...team };
-            return {
-              ...t,
-              ...team
-            };
-          }
-          return t;
-        });
+    const status = await updateTeamRequest(team);
 
-        displayTeams(allTeams);
-        $("#teamsForm").reset();
+    if (status.success) {
+      allTeams = allTeams.map(t => {
+        if (t.id === editId) {
+          console.warn("team", team);
+          // return team;
+          // return { ...team };
+          return {
+            ...t,
+            ...team
+          };
+        }
+        return t;
+      });
 
-        hideLoadingMask();
-      }
-    });
+      displayTeams(allTeams);
+      $("#teamsForm").reset();
+
+      hideLoadingMask();
+    }
   } else {
     createTeamRequest(team).then(status => {
       if (status.success) {
@@ -199,7 +199,7 @@ function initEvents() {
   $("#teamsTable tbody").addEventListener("click", e => {
     if (e.target.matches("a.remove-btn")) {
       const id = e.target.dataset.id;
-      //console.warn("remove %o", id);
+
       showLoadingMask();
       deleteTeamRequest(id, async ({ success }) => {
         if (success) {
