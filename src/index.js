@@ -1,6 +1,6 @@
 import { loadTeamsRequest, createTeamRequest, deleteTeamRequest, updateTeamRequest } from "./middleware";
 import "./style.css";
-import { $, filterElements, mask, unmask } from "./utilities";
+import { $, debounce, filterElements, mask, unmask } from "./utilities";
 //starting the app
 
 let editId;
@@ -121,22 +121,6 @@ async function onSubmit(e) {
   }
 }
 
-function debounce(fn, ms) {
-  let timer;
-  console.info("debounce", ms);
-
-  return function (e) {
-    console.info("inside debounce..", timer);
-
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-      console.warn("timeout search");
-      fn(e);
-    }, ms);
-    // console.info("timer %o", timer);
-  };
-}
-
 function initEvents() {
   $("#removeSelected").addEventListener(
     "click",
@@ -147,8 +131,8 @@ function initEvents() {
 
   $("#searchTeams").addEventListener(
     "input",
-    debounce(e => {
-      console.info(e.target.value);
+    debounce(function (e) {
+      console.info("search: ", this, e.target.value);
       const teams = filterElements(allTeams, e.target.value);
       displayTeams(teams);
     }, 400)
