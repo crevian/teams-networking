@@ -3,6 +3,9 @@ import "./style.css";
 import { $, debounce, filterElements, mask, unmask } from "./utilities";
 //starting the app
 
+// import { debounce } from "lodash"; // bad, don't import all functions
+// import debounce from "lodash/debounce"; //better
+
 let editId;
 let allTeams = [];
 const form = "#teamsForm";
