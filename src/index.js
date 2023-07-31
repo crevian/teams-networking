@@ -1,6 +1,6 @@
 import { loadTeamsRequest, createTeamRequest, deleteTeamRequest, updateTeamRequest } from "./middleware";
 import "./style.css";
-import { $, debounce, filterElements, mask, unmask } from "./utilities";
+import { $, $$, debounce, filterElements, mask, unmask } from "./utilities";
 //starting the app
 
 // import { debounce } from "lodash"; // bad, don't import all functions
@@ -13,7 +13,7 @@ const form = "#teamsForm";
 function getTeamAsHTML({ id, promotion, members, name, url }) {
   const displayUrl = url.startsWith("https://github.com/") ? url.substring(19) : url;
   return `<tr>
-    <td><input type="checkbox" name="selected" value="${id}"></td>
+    <td style="text-align: center"><input type="checkbox" name="selected" value="${id}"></td>
     <td>${promotion}</td>
     <td>${members}</td>
     <td>${name}</td>
@@ -126,13 +126,13 @@ async function onSubmit(e) {
 }
 
 async function removeSelected() {
-  mask(form);
+  mask("#main");
   const selected = document.querySelectorAll("input[name=selected]:checked");
   selected.forEach(input => {
     deleteTeamRequest(input.value);
   });
   await loadTeams();
-  unmask(form);
+  unmask("#main");
 }
 
 function initEvents() {
@@ -146,6 +146,13 @@ function initEvents() {
       displayTeams(teams);
     }, 400)
   );
+
+  $("#selectAll").addEventListener("input", e => {
+    console.warn("e", e);
+    $$("input[name=selected]").forEach(element => {
+      element.checked = e.target.checked;
+    });
+  });
 
   $("#teamsTable tbody").addEventListener("click", e => {
     if (e.target.matches("a.remove-btn")) {
