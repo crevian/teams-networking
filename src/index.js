@@ -81,7 +81,11 @@ function loadTeams() {
 }
 
 function startEdit(id) {
+  //clean inputs
+  $("#teamsForm").reset();
+
   editId = id;
+
   // const team = allTeams.find(team => team.id == id);
   // setTeamValues(team);
   displayTeams(allTeams, id);
