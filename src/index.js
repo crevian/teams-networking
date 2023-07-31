@@ -49,13 +49,13 @@ function getTeamAsHTMLInputs({ id, promotion, members, name, url }) {
 }
 
 let previewDisplayTeams = [];
-function displayTeams(teams, editId) {
-  if (!editId && teams === previewDisplayTeams) {
+function displayTeams(teams, editId, force) {
+  if (force !== true && !editId && teams === previewDisplayTeams) {
     console.warn("same teams already displayed");
     return;
   }
 
-  if (!editId && teams.length === previewDisplayTeams.length) {
+  if (!force && !editId && teams.length === previewDisplayTeams.length) {
     if (teams.every((team, i) => team === previewDisplayTeams[i])) {
       console.warn("same content");
       return;
@@ -85,6 +85,13 @@ function startEdit(id) {
   // const team = allTeams.find(team => team.id == id);
   // setTeamValues(team);
   displayTeams(allTeams, id);
+  setInputsDisabled(true);
+}
+
+function setInputsDisabled(disabled) {
+  $$("tfoot input").forEach(input => {
+    input.disabled = disabled;
+  });
 }
 
 function setTeamValues({ promotion, members, name, url }) {
@@ -197,8 +204,13 @@ function initEvents() {
 
   $("#teamsForm").addEventListener("submit", onSubmit);
   $("#teamsForm").addEventListener("reset", () => {
-    displayTeams(allTeams);
-    editId = undefined;
+    console.warn("reset", editId);
+    if (editId) {
+      // allTeams = [...allTeams];
+      editId = undefined;
+      displayTeams(allTeams, editId, true);
+      setInputsDisabled(false);
+    }
   });
 }
 
